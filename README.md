@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # GenZ Era World — Production Ecommerce Platform
 
 > Not your average pop culture store. Premium Action Figures, Sneakers, Apparel & Collectibles.
@@ -224,3 +225,6 @@ src/
 ---
 
 Made with ⚡ for the GenZ fandom.
+=======
+# GenZ-Era-World-Website-For-Business-Responsive-With-Admin-Panel
+>>>>>>> 3be45209ef0c21fea3fc92e15f51fb2a2fdfa18a
