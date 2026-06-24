@@ -49,6 +49,8 @@ export interface Product {
   stock_status: StockStatus
   created_at: string
   updated_at: string
+  has_variants: boolean
+variants: string[]
 }
 
 export interface CartItem {

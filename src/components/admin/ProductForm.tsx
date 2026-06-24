@@ -30,6 +30,8 @@ export default function ProductForm({ categories, product }: ProductFormProps) {
     is_featured: product?.is_featured ?? false,
     is_trending: product?.is_trending ?? false,
     is_new_arrival: product?.is_new_arrival ?? false,
+    has_variants: product?.has_variants ?? false,
+variants: product?.variants?.join(',') ?? '',
   })
 
   const [newImages, setNewImages] = useState<File[]>([])
@@ -73,6 +75,14 @@ export default function ProductForm({ categories, product }: ProductFormProps) {
         is_featured: form.is_featured,
         is_trending: form.is_trending,
         is_new_arrival: form.is_new_arrival,
+        has_variants: form.has_variants,
+
+variants: form.has_variants
+  ? form.variants
+      .split(',')
+      .map(v => v.trim())
+      .filter(Boolean)
+  : [],
         updated_at: new Date().toISOString(),
       }
 
@@ -235,6 +245,77 @@ export default function ProductForm({ categories, product }: ProductFormProps) {
           </div>
         </div>
       </div>
+
+      {/* Variants */}
+<div className="bg-brand-card border border-brand-border rounded-2xl p-6">
+  <h2 className="font-bold text-white mb-4">Variants</h2>
+
+  <label className="flex items-center gap-3 cursor-pointer mb-4">
+    <div
+      onClick={() =>
+        setForm({
+          ...form,
+          has_variants: !form.has_variants,
+        })
+      }
+      className={`w-11 h-6 rounded-full transition-colors cursor-pointer relative ${
+        form.has_variants
+          ? 'bg-brand-purple'
+          : 'bg-brand-dark border border-brand-border'
+      }`}
+    >
+      <div
+        className={`w-4 h-4 rounded-full bg-white absolute top-1 transition-transform ${
+          form.has_variants ? 'translate-x-6' : 'translate-x-1'
+        }`}
+      />
+    </div>
+
+    <span className="text-sm text-gray-300">
+      Product Has Variants
+    </span>
+  </label>
+
+  {form.has_variants && (
+    <div>
+      <label className="text-xs text-gray-400 mb-1.5 block">
+        Variants
+      </label>
+
+      <input
+        type="text"
+        value={form.variants}
+        onChange={(e) =>
+          setForm({
+            ...form,
+            variants: e.target.value,
+          })
+        }
+        className="w-full bg-brand-dark border border-brand-border focus:border-brand-purple text-white rounded-lg px-4 py-3 text-sm outline-none transition-colors"
+        placeholder="S,M,L,XL or 7,8,9,10 or Standard,Deluxe"
+      />
+
+      <p className="text-xs text-gray-500 mt-2">
+        Separate options with commas
+      </p>
+
+      <div className="flex flex-wrap gap-2 mt-3">
+        {form.variants
+          .split(',')
+          .map(v => v.trim())
+          .filter(Boolean)
+          .map((variant, index) => (
+            <span
+              key={index}
+              className="px-3 py-1 rounded-full bg-brand-purple/20 border border-brand-purple/40 text-brand-purple-light text-xs"
+            >
+              {variant}
+            </span>
+          ))}
+      </div>
+    </div>
+  )}
+</div>
 
       {/* Toggles */}
       <div className="bg-brand-card border border-brand-border rounded-2xl p-6">
