@@ -108,6 +108,9 @@ function TrackOrderContent() {
               <h2 className="font-bold text-white mb-4">Order Details</h2>
               <p className="text-white">{order.order_number}</p>
               <p className="text-white">{formatPrice(order.total)}</p>
+              <p className="text-brand-purple-light mt-2">
+  Status: {order.status}
+</p>
             </div>
           </div>
         )}
