@@ -16,6 +16,7 @@ interface ProductDetailProps {
 export default function ProductDetail({ product }: ProductDetailProps) {
   const [selectedImage, setSelectedImage] = useState(0)
   const [quantity, setQuantity] = useState(1)
+  const [selectedVariant, setSelectedVariant] = useState('')
   const { addItem, openCart } = useCartStore()
 
   const images = product.images?.length
@@ -34,19 +35,36 @@ export default function ProductDetail({ product }: ProductDetailProps) {
     ? Math.round(((product.price - product.sale_price) / product.price) * 100)
     : null
 
-  const handleAddToCart = () => {
-    if (product.stock_status === 'out_of_stock') return
-    addItem(product, quantity)
-    toast.success(`${product.name} added to cart!`)
-    openCart()
+ const handleAddToCart = () => {
+  if (product.stock_status === 'out_of_stock') return
+
+  if (product.has_variants && !selectedVariant) {
+    toast.error('Please select an option')
+    return
   }
 
-  const handleBuyNow = () => {
-    if (product.stock_status === 'out_of_stock') return
-    addItem(product, quantity)
-    window.location.href = '/checkout'
+  addItem(product, quantity, selectedVariant)
+
+  toast.success(
+    selectedVariant
+      ? `${product.name} (${selectedVariant}) added to cart!`
+      : `${product.name} added to cart!`
+  )
+
+  openCart()
+}
+ const handleBuyNow = () => {
+  if (product.stock_status === 'out_of_stock') return
+
+  if (product.has_variants && !selectedVariant) {
+    toast.error('Please select an option')
+    return
   }
 
+  addItem(product, quantity, selectedVariant)
+
+  window.location.href = '/checkout'
+}
   return (
     <div className="min-h-screen pt-24 pb-16 px-4">
       <div className="max-w-6xl mx-auto">
@@ -150,6 +168,31 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                 {product.description}
               </p>
             )}
+
+            {product.has_variants && product.variants?.length > 0 && (
+  <div className="mb-6">
+    <h3 className="text-sm text-gray-400 mb-3">
+      Select Option
+    </h3>
+
+    <div className="flex flex-wrap gap-2">
+      {product.variants.map((variant) => (
+        <button
+          key={variant}
+          type="button"
+          onClick={() => setSelectedVariant(variant)}
+          className={`px-4 py-2 rounded-lg border transition-all ${
+            selectedVariant === variant
+              ? 'bg-brand-purple border-brand-purple text-white'
+              : 'bg-brand-dark border-brand-border text-gray-300 hover:border-brand-purple'
+          }`}
+        >
+          {variant}
+        </button>
+      ))}
+    </div>
+  </div>
+)}
 
             {/* Quantity */}
             {product.stock_status !== 'out_of_stock' && (

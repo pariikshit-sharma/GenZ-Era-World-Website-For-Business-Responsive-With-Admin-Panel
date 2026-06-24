@@ -57,6 +57,9 @@ export interface CartItem {
   product_id: string
   product: Product
   quantity: number
+
+  selected_variant?: string
+  cart_key: string
 }
 
 export interface Cart {

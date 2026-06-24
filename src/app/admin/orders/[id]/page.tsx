@@ -37,31 +37,57 @@ export default async function AdminOrderDetailPage({ params }: { params: Promise
           {/* Items */}
           <div className="bg-brand-card border border-brand-border rounded-2xl p-6">
             <h2 className="font-bold text-white mb-4">Order Items</h2>
-            <div className="space-y-3">
-              {order.items?.map((item: any) => (
-                <div key={item.id} className="flex items-center justify-between p-3 bg-brand-dark rounded-xl">
-                  <div>
-                    <p className="text-white text-sm font-medium">{item.product_name}</p>
-                    <p className="text-gray-400 text-xs">Qty: {item.quantity} × {formatPrice(item.product_price)}</p>
-                  </div>
-                  <p className="text-white font-bold">{formatPrice(item.subtotal)}</p>
-                </div>
-              ))}
-            </div>
+           <div className="space-y-3">
+  {order.items?.map((item: any) => (
+    <div
+      key={item.id}
+      className="flex items-center justify-between p-3 bg-brand-dark rounded-xl"
+    >
+      <div>
+        <p className="text-white text-sm font-medium">
+          {item.product_name}
+        </p>
+
+        {item.selected_variant && (
+          <p className="text-brand-purple-light text-xs">
+            Size: {item.selected_variant}
+          </p>
+        )}
+
+        <p className="text-gray-400 text-xs">
+          Qty: {item.quantity} × {formatPrice(item.product_price)}
+        </p>
+      </div>
+
+      <p className="text-white font-bold">
+        {formatPrice(item.subtotal)}
+      </p>
+    </div>
+  ))}
+</div>
             <div className="border-t border-brand-border mt-4 pt-4 space-y-2 text-sm">
               <div className="flex justify-between text-gray-400">
-                <span>Subtotal</span><span>{formatPrice(order.subtotal)}</span>
+                <span>Subtotal</span>
+                <span>{formatPrice(order.subtotal)}</span>
               </div>
+
               <div className="flex justify-between text-gray-400">
                 <span>Delivery</span>
-                <span>{order.delivery_charge === 0 ? 'FREE' : formatPrice(order.delivery_charge)}</span>
+                <span>
+                  {order.delivery_charge === 0
+                    ? 'FREE'
+                    : formatPrice(order.delivery_charge)}
+                </span>
               </div>
+
               <div className="flex justify-between font-bold text-white">
-                <span>Total</span><span className="text-brand-purple-light">{formatPrice(order.total)}</span>
+                <span>Total</span>
+                <span className="text-brand-purple-light">
+                  {formatPrice(order.total)}
+                </span>
               </div>
             </div>
           </div>
-
           {/* Payment Proof */}
           {order.payment_screenshot_url && (
             <div className="bg-brand-card border border-brand-border rounded-2xl p-6">

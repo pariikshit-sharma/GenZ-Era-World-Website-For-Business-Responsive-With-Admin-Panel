@@ -59,12 +59,13 @@ export default function CheckoutPage() {
     sessionStorage.setItem('checkoutData', JSON.stringify({
       customer: form,
       items: items.map((item) => ({
-        product_id: item.product_id,
-        product_name: item.product.name,
-        product_price: item.product.sale_price ?? item.product.price,
-        quantity: item.quantity,
-        subtotal: (item.product.sale_price ?? item.product.price) * item.quantity,
-      })),
+  product_id: item.product_id,
+  product_name: item.product.name,
+  product_price: item.product.sale_price ?? item.product.price,
+  quantity: item.quantity,
+  selected_variant: item.selected_variant,
+  subtotal: (item.product.sale_price ?? item.product.price) * item.quantity,
+})),
       subtotal,
       delivery_charge: deliveryCharge,
       total,
@@ -181,7 +182,7 @@ export default function CheckoutPage() {
                   {items.map((item) => {
                     const price = item.product.sale_price ?? item.product.price
                     return (
-                      <div key={item.product_id} className="flex items-center gap-3">
+                      <div key={item.cart_key} className="flex items-center gap-3">
                         <div className="w-12 h-12 rounded-lg overflow-hidden bg-brand-dark flex-shrink-0">
                           <Image
                             src={item.product.featured_image || item.product.images?.[0]?.url || '/images/placeholder.jpg'}
@@ -192,8 +193,19 @@ export default function CheckoutPage() {
                           />
                         </div>
                         <div className="flex-1 min-w-0">
-                          <p className="text-sm text-white truncate">{item.product.name}</p>
-                          <p className="text-xs text-gray-500">Qty: {item.quantity}</p>
+                        <p className="text-sm text-white truncate">
+  {item.product.name}
+</p>
+
+{item.selected_variant && (
+  <p className="text-xs text-brand-purple-light">
+    Size: {item.selected_variant}
+  </p>
+)}
+
+<p className="text-xs text-gray-500">
+  Qty: {item.quantity}
+</p>
                         </div>
                         <p className="text-sm font-medium text-white flex-shrink-0">
                           {formatPrice(price * item.quantity)}

@@ -88,58 +88,79 @@ export default function CartDrawer() {
               const imageUrl = item.product.featured_image ||
                 item.product.images?.[0]?.url || '/images/placeholder.jpg'
 
-              return (
-                <div
-                  key={item.product_id}
-                  className="flex gap-3 bg-brand-dark rounded-xl p-3 border border-brand-border"
-                >
-                  <div className="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0 bg-brand-darkest">
-                    <Image
-                      src={imageUrl}
-                      alt={item.product.name}
-                      width={64}
-                      height={64}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-white truncate">{item.product.name}</p>
-                    <p className="text-brand-purple-light font-bold text-sm mt-0.5">
-                      {formatPrice(price)}
-                    </p>
-                    <div className="flex items-center gap-2 mt-2">
-                      <button
-                        onClick={() => updateQuantity(item.product_id, item.quantity - 1)}
-                        className="w-6 h-6 rounded bg-brand-border flex items-center justify-center hover:bg-brand-purple/30 transition-colors"
-                      >
-                        <Minus size={12} />
-                      </button>
-                      <span className="text-sm font-medium w-6 text-center">{item.quantity}</span>
-                      <button
-                        onClick={() => updateQuantity(item.product_id, item.quantity + 1)}
-                        disabled={item.quantity >= item.product.stock_quantity}
-                        className="w-6 h-6 rounded bg-brand-border flex items-center justify-center hover:bg-brand-purple/30 transition-colors disabled:opacity-40"
-                      >
-                        <Plus size={12} />
-                      </button>
-                    </div>
-                  </div>
-                  <div className="flex flex-col items-end justify-between">
-                    <button
-                      onClick={() => removeItem(item.product_id)}
-                      className="text-gray-500 hover:text-red-400 transition-colors"
-                    >
-                      <Trash2 size={14} />
-                    </button>
-                    <p className="text-sm font-bold text-white">
-                      {formatPrice(price * item.quantity)}
-                    </p>
-                  </div>
-                </div>
-              )
+             return (
+  <div
+    key={item.cart_key}
+    className="flex gap-3 bg-brand-dark rounded-xl p-3 border border-brand-border"
+  >
+    <div className="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0 bg-brand-darkest">
+      <Image
+        src={imageUrl}
+        alt={item.product.name}
+        width={64}
+        height={64}
+        className="w-full h-full object-cover"
+      />
+    </div>
+
+    <div className="flex-1 min-w-0">
+      <p className="text-sm font-medium text-white truncate">
+        {item.product.name}
+      </p>
+
+      {item.selected_variant && (
+        <p className="text-xs text-brand-purple-light mt-1">
+          Size: {item.selected_variant}
+        </p>
+      )}
+
+      <p className="text-brand-purple-light font-bold text-sm mt-0.5">
+        {formatPrice(price)}
+      </p>
+
+      <div className="flex items-center gap-2 mt-2">
+        <button
+          onClick={() =>
+            updateQuantity(item.cart_key, item.quantity - 1)
+          }
+          className="w-6 h-6 rounded bg-brand-border flex items-center justify-center hover:bg-brand-purple/30 transition-colors"
+        >
+          <Minus size={12} />
+        </button>
+
+        <span className="text-sm font-medium w-6 text-center">
+          {item.quantity}
+        </span>
+
+        <button
+          onClick={() =>
+            updateQuantity(item.cart_key, item.quantity + 1)
+          }
+          disabled={item.quantity >= item.product.stock_quantity}
+          className="w-6 h-6 rounded bg-brand-border flex items-center justify-center hover:bg-brand-purple/30 transition-colors disabled:opacity-40"
+        >
+          <Plus size={12} />
+        </button>
+      </div>
+    </div>
+
+    <div className="flex flex-col items-end justify-between">
+      <button
+        onClick={() => removeItem(item.cart_key)}
+        className="text-gray-500 hover:text-red-400 transition-colors"
+      >
+        <Trash2 size={14} />
+      </button>
+
+      <p className="text-sm font-bold text-white">
+        {formatPrice(price * item.quantity)}
+      </p>
+    </div>
+  </div>
+)
             })
           )}
-        </div>
+</div>
 
         {/* Footer */}
         {items.length > 0 && (

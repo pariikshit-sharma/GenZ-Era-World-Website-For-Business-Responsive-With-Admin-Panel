@@ -105,14 +105,15 @@ export default function PaymentPage() {
       if (orderError) throw orderError
 
       // Create order items
-      const orderItems = checkoutData.items.map((item: any) => ({
-        order_id: order.id,
-        product_id: item.product_id,
-        product_name: item.product_name,
-        product_price: item.product_price,
-        quantity: item.quantity,
-        subtotal: item.subtotal,
-      }))
+     const orderItems = checkoutData.items.map((item: any) => ({
+  order_id: order.id,
+  product_id: item.product_id,
+  product_name: item.product_name,
+  product_price: item.product_price,
+  quantity: item.quantity,
+  selected_variant: item.selected_variant || null,
+  subtotal: item.subtotal,
+}))
 
       await supabase.from('order_items').insert(orderItems)
 
@@ -171,11 +172,20 @@ export default function PaymentPage() {
               <h2 className="font-bold text-white mb-4">Order Summary</h2>
               <div className="space-y-2 text-sm">
                 {checkoutData.items.map((item: any) => (
-                  <div key={item.product_id} className="flex justify-between text-gray-300">
-                    <span>{item.product_name} × {item.quantity}</span>
-                    <span>{formatPrice(item.subtotal)}</span>
-                  </div>
-                ))}
+  <div key={`${item.product_id}-${item.selected_variant || ''}`} className="flex justify-between text-gray-300">
+    <div>
+      <p>{item.product_name} × {item.quantity}</p>
+
+      {item.selected_variant && (
+        <p className="text-xs text-brand-purple-light">
+          Size: {item.selected_variant}
+        </p>
+      )}
+    </div>
+
+    <span>{formatPrice(item.subtotal)}</span>
+  </div>
+))}
                 <div className="border-t border-brand-border pt-2 mt-2 space-y-1">
                   <div className="flex justify-between text-gray-400">
                     <span>Subtotal</span>
